@@ -27,7 +27,7 @@ def app():
 
         
         image = Image.open('Player_img.jpg')
-        
+        st.info('The Application is under development, hence only limited functionalities are available!')
         col1, col2 = st.columns(2)
         
         col1.title(" Players Comparison Analysis ")     
