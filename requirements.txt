@@ -3,7 +3,7 @@ matplotlib==3.3.4
 mplfinance==0.12.7a17
 mplsoccer==1.0.6
 mpmath==1.2.1
-numpy==1.20.1
+numPy==1.20.1
 pandas==1.2.4
 plotly==5.3.1
 seaborn==0.11.1
