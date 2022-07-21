@@ -34,7 +34,10 @@ def app():
         col2.image(image)
         
         dataframe = pd.read_csv("Comparison.csv")
-        
+        dataframe['Session Date']= pd.to_datetime(dataframe['Session Date'])
+        match_dates = dataframe['Session Date'].dt.date
+        match_dates = match_dates.unique()
+        match_dates = np.sort(match_dates, axis=None)
         ##RADAR CHART
         
         columns_to_keep = ['Session Title','Player Name', 'Distance Per Min', 'HSR Per Minute (Absolute)', 'Max Speed', 'Max Acceleration','Total Distance', 'HMLD Per Minute']
@@ -242,6 +245,8 @@ def app():
             player1 = st.selectbox("Select Player 1",players_list, index = 0)
             player2 = st.selectbox("Select Player 2",players_list, index = 1)
             session = st.selectbox("Select Session",session_list, index = 0)
+            
+            selected_date = st.sidebar.select_slider('Select the match date range', match_dates, value=[min(match_dates),max(match_dates)])
             
             st.markdown("""
             <style>

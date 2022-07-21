@@ -34,6 +34,11 @@ def app():
         #col2.image(image)
         
         dataframe = pd.read_csv("Comparison.csv")
+        dataframe['Session Date']= pd.to_datetime(dataframe['Session Date'])
+        match_dates = dataframe['Session Date'].dt.date
+        match_dates = match_dates.unique()
+        match_dates = np.sort(match_dates, axis=None)
+        
         columns_pizza =['Session Title','Player Name','Distance Per Min', 'HSR Per Minute (Absolute)','Number Of High Intensity Bursts', 'High Intensity Bursts Total Distance', 'High Intensity Bursts Maximum Speed','Max Speed', 'Average Speed','Sprints','Max Acceleration','Max Deceleration', 'HMLD Per Minute', 'HML Distance', 'HML Efforts Total Distance', 'HML Efforts','HML Efforts Maximum Speed']
         
         pizza_df = dataframe[columns_pizza]
@@ -336,6 +341,7 @@ def app():
             #st.sidebar.markdown('''##### Player's performance over the season''')
             player1 = st.selectbox("Select Player",players_list, index = 0)
             session = st.selectbox("Select Session",session_list, index = 0)
+            selected_date = st.sidebar.select_slider('Select the match date range', match_dates, value=[min(match_dates),max(match_dates)])
             st.markdown("""
             <style>
             div.stButton > button:first-child {
