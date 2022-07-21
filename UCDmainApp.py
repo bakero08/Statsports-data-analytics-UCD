@@ -1,5 +1,6 @@
 import UCDApp
 import UCDapp2
+import UCDapp3
 import UCDhome
 
 import streamlit as st
@@ -9,7 +10,8 @@ import streamlit as st
 PAGES = {
     "Home Page": UCDhome,
     "Player Comparision": UCDApp,
-    "Player Stats": UCDapp2
+    "Player Stats": UCDapp2,
+    "Seasonal Stats": UCDapp3
 }
 st.sidebar.title('Navigation')
 selection = st.sidebar.radio("Go to", list(PAGES.keys()))

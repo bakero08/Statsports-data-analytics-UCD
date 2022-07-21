@@ -334,6 +334,56 @@ def app():
             
             return fig
             
+        def timeSeriesSeason(metric,session):
+            
+            columns_g = ['Session Title','Player Name','Sprints', 'HML Efforts Maximum Speed','Accelerations','Max Deceleration' ,'High Intensity Bursts Maximum Speed','Max Speed', 'Max Acceleration','Total Distance', 'HMLD Per Minute']
+            df_p = dataframe[columns_g]
+
+            df_p = df_p[(df_p['Session Title']==session)]
+            
+            fig = go.Figure()
+
+            fig.add_shape(type='line',
+                            x0=0,
+                            y0=7.5,
+                            x1=11,
+                            y1=7.5,
+                            line=dict(color='Red',),
+                            xref='x',
+                            yref='y'
+            )
+            fig.add_trace(
+                go.Bar(
+                    x=df_p['Player Name'],
+                    y=df_p[metric],
+                    #name="Number of Sprints",
+                    text = df_p[metric],
+                    textposition='outside',
+                    textfont=dict(
+                    size=13,
+                    color='#1f77b4'),      
+                    #marker_color=["#f3e5f5", '#e1bee7', '#ce93d8', '#ba68c8','#ab47bc',
+                     #           '#9c27b0','#8e24aa','#7b1fa2','#6a1b9a','#4a148c','#3c0a99'],
+                    #marker_line_color='rgb(17, 69, 126)',
+                    #marker_line_width=1, 
+                ))
+            fig.update_traces(texttemplate='%{text:.2s}')
+            #fig.update_layout(legend_title_text='Stats',
+            #                title_text='Pace Stats over the Season')
+            
+            fig.update_layout(
+                                        title_font_family="Times New Roman",
+                                        title_font_size = 25,
+                                        title_font_color="darkblue",
+                                        title_x=0.5,
+                                        legend_title_text='Stats',
+                                        plot_bgcolor="rgb(240,240,240)",
+                                        title_text=f' Time Series Stats over the Season for {metric}',
+                                        height=550
+            )
+            
+            
+            return fig
 
 
         
@@ -372,6 +422,7 @@ def app():
             pchart = pizzaChart(player1)
             gauge_s, gauge_d, gauge_hd = gauges(player1,session)
             combo_c = comboChart(player1)
+            
             player_img = Image.open(f"Facepack/{player1}.png")
             
             col1.markdown("_________________")
@@ -390,4 +441,8 @@ def app():
             col7.plotly_chart(combo_c, use_container_width=True)
             st.plotly_chart(combo_c, use_container_width=True)
             
+            metric_list = ['Max Speed']
+            metric_sel = st.selectbox("Select metric",metric_list, index = 0)
+            timeSeries_f = timeSeriesSeason(metric_sel,session)
+            st.plotly_chart(timeSeries_f, use_container_width=True)
         
