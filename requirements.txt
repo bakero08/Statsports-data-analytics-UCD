@@ -11,3 +11,6 @@ scipy==1.6.2
 streamlit==1.10.0
 soccerplots==1.0.0
 altair==4.2.0
+statsbombpy==1.4.3
+statsmodels==0.12.2
+streamlit-aggrid==0.2.3.post2
