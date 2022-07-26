@@ -393,32 +393,6 @@ def app():
             
             return fig
 
-
-        
-        def scatterPlot():
-            columns_to_keep_scat = ['Player Name', 'Distance Per Min', 'HSR Per Minute (Absolute)','Average Speed', 'Max Speed', 'Max Acceleration','Total Distance', 'HMLD Per Minute']
-            scatter_df = dataframe[columns_to_keep_scat]
-            
-            scatter_df = scatter_df.groupby('Player Name').mean()
-            scatter_df = scatter_df.reset_index(0)
-            #scatter_df
-        
-            position = ['MID', 'ATT', 'DEF','ATT', 'MID', 'DEF','ATT', 'MID','MID', 'DEF','ATT', 'MID', 'DEF','ATT', 'MID', 'DEF','ATT', 'MID', 'DEF','DEF']
-            scatter_df['position'] = position
-            scatter_df = round(scatter_df,2)
-            
-            plot = px.scatter(scatter_df, x='Total Distance', y='HMLD Per Minute', color='position', size='Distance Per Min', symbol='position', hover_data = ['Player Name'])
-            plot.update_layout(
-                            title_font_family="Times New Roman",
-                            title_font_size = 20,
-                            title_font_color="darkblue",
-                            title_x=0.5,
-                            plot_bgcolor="rgb(240,240,240)",
-                            title_text='Position-wise over the season Distance stat',
-                            height=550)
-            return plot    
-
-        
         with st.sidebar:
             st.title('Players Performance Analysis')
             st.sidebar.markdown('''##### Compare two player's performance over the season''')
@@ -461,9 +435,6 @@ def app():
             | Max Acceleration |Maximum acceleration attained during the game |
             """
             )
-        scatterP = scatterPlot()
-        st.plotly_chart(scatterP, use_container_width=True)
-            
             
         if submitButton:
             if page == 'Session':

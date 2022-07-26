@@ -150,53 +150,23 @@ def app():
             
             return fig
 
-
-
+        players_list = dataframe['Player Name'].sort_values(ascending=True)
+        players_list = players_list.unique()
         
-        def scatterPlot():
-            columns_to_keep_scat = ['Player Name', 'Distance Per Min', 'HSR Per Minute (Absolute)','Average Speed', 'Max Speed', 'Max Acceleration','Total Distance', 'HMLD Per Minute']
-            scatter_df = dataframe[columns_to_keep_scat]
-            
-            scatter_df = scatter_df.groupby('Player Name').mean()
-            scatter_df = scatter_df.reset_index(0)
-            #scatter_df
         
-            position = ['MID', 'ATT', 'DEF','ATT', 'MID', 'DEF','ATT', 'MID','MID', 'DEF','ATT', 'MID', 'DEF','ATT', 'MID', 'DEF','ATT', 'MID', 'DEF','DEF']
-            scatter_df['position'] = position
-            scatter_df = round(scatter_df,2)
-            
-            plot = px.scatter(scatter_df, x='Total Distance', y='HMLD Per Minute', color='position', size='Distance Per Min', symbol='position', hover_data = ['Player Name'])
-            plot.update_layout(
-                            title_font_family="Times New Roman",
-                            title_font_size = 20,
-                            title_font_color="darkblue",
-                            title_x=0.5,
-                            plot_bgcolor="rgb(240,240,240)",
-                            title_text='Position-wise over the season Distance stat',
-                            height=550)
-            return plot    
-
-        
-
-
-            
-        scatterP = scatterPlot()
-        st.plotly_chart(scatterP, use_container_width=True)
-
         
         session_list = dataframe['Session Title'].sort_values(ascending=True)
         session_list = session_list.unique()
         session = st.selectbox("Select Session",session_list, index = 0)
-
-        players_list = dataframe['Player Name'].sort_values(ascending=True)
-        players_list = players_list.unique()
+            
+        
         player1 = st.selectbox("Select Player",players_list, index = 0)
         combo_c = comboChart(player1)
+            
         st.plotly_chart(combo_c, use_container_width=True)
             
         metric_list = ['Max Speed','Max Deceleration']
         metric_sel = st.selectbox("Select metric",metric_list, index = 0)
         timeSeries_f = timeSeriesSeason(metric_sel,session)
         st.plotly_chart(timeSeries_f, use_container_width=True)
-
-            
+        
