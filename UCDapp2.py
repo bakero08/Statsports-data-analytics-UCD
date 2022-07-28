@@ -433,7 +433,7 @@ def app():
         metrices = ['Sprints', 'Distance Per Min','Accelerations', 'Max Acceleration','Decelerations','Max Deceleration' ,'HSR Per Minute (Absolute)', 'Average Speed','Max Speed','Total Distance', 'HMLD Per Minute']
         
         col8,col9 = st.columns((1,3))
-        metric_sel = col8.selectbox("Select Session :",metrices, index = 0)
+        metric_sel = col8.selectbox("Select Metric :",metrices, index = 0)
         
         playerStatC = pStatsChart(player1,metric_sel)
         col9.plotly_chart(playerStatC, use_container_width=True)
