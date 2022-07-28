@@ -31,7 +31,7 @@ def app():
         st.info('The Application is under development, hence only limited functionalities are available!')
         col1, col2 = st.columns((2,1))
         
-        col1.title("Individual Player Performance Analysis")
+        col1.title("Individual Player Performance")
         #col2.image(image)
         
         dataframe = pd.read_csv("Comparison.csv")
@@ -65,8 +65,7 @@ def app():
             pizza_df_player = pizza_df[(pizza_df['Player Name']==p1)]
         
             pizza_value_df=[]
-            pizza_value_df_ret = pizza_df_player.drop(['Player Name'], axis=1 )
-            pizza_value_df = pizza_value_df_ret.drop(['Session Title'], axis=1 )
+            pizza_value_df = pizza_df_player.drop(['Session Title','Player Name'], axis=1 )
             
             pizza_values = pizza_value_df.mean()
             #ra = ra.to_list()
@@ -197,9 +196,8 @@ def app():
                 ucd_img, fig, left=0.1, bottom=0.02, width=0.13, height=0.127
             )
             
-            #plt.title("Pizza Chart  ", fontsize=20, fontfamily='serif', color = 'Green')       
-            
-            return fig, pizza_value_df_ret
+            #plt.title("Pizza Chart  ", fontsize=20, fontfamily='serif', color = 'Green')
+            return fig
             
         def gauges(p1,s1):
             columns_g = ['Session Title','Player Name', 'Max Speed','Total Distance', 'HML Distance']
@@ -210,78 +208,73 @@ def app():
             player_guage_df = player_guage_df.drop(['index'],axis=1)
             #player_guage_df
             
-            if len(player_guage_df) <1: 
-                st.warning(f"{p1} didn't play the selected match! Hence some figures will not be available")   
-                return 0,0,0    
-            else:
+            max_sp = player_guage_df.iloc[0]['Max Speed']
+            t_dis = player_guage_df.iloc[0]['Total Distance']
+            hml_dis = player_guage_df.iloc[0]['HML Distance']
             
-                max_sp = player_guage_df.iloc[0]['Max Speed']
-                t_dis = player_guage_df.iloc[0]['Total Distance']
-                hml_dis = player_guage_df.iloc[0]['HML Distance']
-                
-                fig_d = go.Figure(go.Indicator(
-                    domain = {'x': [0, 1], 'y': [0, 1]},
-                    value = t_dis,
-                    mode = "gauge+number+delta",
-                    title = {'text': "Total Distance"},
-                    delta = {'reference': 10000},
-                    gauge = {'axis': {'range': [None, 15000]},
-                            'steps' : [
-                                {'range': [0, 8000], 'color': "lightgray"},
-                                {'range': [8000, 10000], 'color': "gray"}],
-                            'threshold' : {'line': {'color': "red", 'width': 4}, 'thickness': 0.75, 'value': 14000}}))
-                fig_d.update_layout(
-                autosize=False,
-                width=500,
-                height=400)
-                
-                #fig_s.show()
-                
-                fig_hd = go.Figure(go.Indicator(
-                    domain = {'x': [0, 1], 'y': [0, 1]},
-                    value = hml_dis,
-                    mode = "gauge+number+delta",
-                    title = {'text': "HML Distance"},
-                    delta = {'reference': 2500},
-                    gauge = {'axis': {'range': [None, 4000]},
-                            'bar': {'color': "crimson"},
-                            'bgcolor': "white",
-                            'borderwidth': 2,
-                            'bordercolor': "gray",
-                            'steps' : [
-                                {'range': [0, 1500], 'color': "beige"},
-                                {'range': [1500, 2500], 'color': "palegoldenrod"}],
-                            'threshold' : {'line': {'color': "red", 'width': 4}, 'thickness': 0.75, 'value': 3500}}))
-                fig_hd.update_layout(
-                autosize=False,
-                width=500,
-                height=400)
-                #fig_d.show()
-                
-                
-                fig_s = go.Figure(go.Indicator(
-                    domain = {'x': [0, 1], 'y': [0, 1]},
-                    value = max_sp,
-                    mode = "gauge+number+delta",
-                    title = {'text': "Max Speed"},
-                    delta = {'reference': 8.5},
-                    gauge = {'axis': {'range': [None, 10]},
-                            'bar': {'color': "red"},
-                            'bgcolor': "white",
-                            'borderwidth': 2,
-                            'bordercolor': "gray",
-                            'steps' : [
-                                {'range': [0, 6], 'color': "yellow"},
-                                {'range': [6, 8.5], 'color': "orange"}],
-                            'threshold' : {'line': {'color': "red", 'width': 4}, 'thickness': 0.75, 'value': 8.5}}))
-                
-                #fig.update_layout( font = {'color': "darkblue", 'family': "Arial"})
-                fig_s.update_layout(
-                autosize=False,
-                width=500,
-                height=400)
-                #fig_hd.show()
-                return fig_s,fig_d,fig_hd
+            fig_d = go.Figure(go.Indicator(
+                domain = {'x': [0, 1], 'y': [0, 1]},
+                value = t_dis,
+                mode = "gauge+number+delta",
+                title = {'text': "Total Distance"},
+                delta = {'reference': 10000},
+                gauge = {'axis': {'range': [None, 15000]},
+                        'steps' : [
+                            {'range': [0, 8000], 'color': "lightgray"},
+                            {'range': [8000, 10000], 'color': "gray"}],
+                        'threshold' : {'line': {'color': "red", 'width': 4}, 'thickness': 0.75, 'value': 14000}}))
+            fig_d.update_layout(
+            autosize=False,
+            width=500,
+            height=400)
+            
+            #fig_s.show()
+            
+            fig_hd = go.Figure(go.Indicator(
+                domain = {'x': [0, 1], 'y': [0, 1]},
+                value = hml_dis,
+                mode = "gauge+number+delta",
+                title = {'text': "HML Distance"},
+                delta = {'reference': 2500},
+                gauge = {'axis': {'range': [None, 4000]},
+                        'bar': {'color': "crimson"},
+                        'bgcolor': "white",
+                        'borderwidth': 2,
+                        'bordercolor': "gray",
+                        'steps' : [
+                            {'range': [0, 1500], 'color': "beige"},
+                            {'range': [1500, 2500], 'color': "palegoldenrod"}],
+                        'threshold' : {'line': {'color': "red", 'width': 4}, 'thickness': 0.75, 'value': 3500}}))
+            fig_hd.update_layout(
+            autosize=False,
+            width=500,
+            height=400)
+            #fig_d.show()
+            
+            
+            fig_s = go.Figure(go.Indicator(
+                domain = {'x': [0, 1], 'y': [0, 1]},
+                value = max_sp,
+                mode = "gauge+number+delta",
+                title = {'text': "Max Speed"},
+                delta = {'reference': 8.5},
+                gauge = {'axis': {'range': [None, 10]},
+                        'bar': {'color': "red"},
+                        'bgcolor': "white",
+                        'borderwidth': 2,
+                        'bordercolor': "gray",
+                        'steps' : [
+                            {'range': [0, 6], 'color': "yellow"},
+                            {'range': [6, 8.5], 'color': "orange"}],
+                        'threshold' : {'line': {'color': "red", 'width': 4}, 'thickness': 0.75, 'value': 8.5}}))
+            
+            #fig.update_layout( font = {'color': "darkblue", 'family': "Arial"})
+            fig_s.update_layout(
+            autosize=False,
+            width=500,
+            height=400)
+            #fig_hd.show()
+            return fig_s,fig_d,fig_hd
             
         def comboChart(p1):
             
@@ -341,100 +334,115 @@ def app():
             
             return fig
             
-        
-        
-        def pStatsChart(p1,metric):
+        def timeSeriesSeason(metric,session):
             
-            pcolumns_com = ['Session Title','Player Name','Sprints', 'Distance Per Min','Accelerations', 'Max Acceleration','Decelerations','Max Deceleration' ,'HSR Per Minute (Absolute)', 'Average Speed','Max Speed','Total Distance', 'HMLD Per Minute']
-            pcombo_df = dataframe[pcolumns_com]
+            columns_g = ['Session Title','Player Name','Sprints', 'HML Efforts Maximum Speed','Accelerations','Max Deceleration' ,'High Intensity Bursts Maximum Speed','Max Speed', 'Max Acceleration','Total Distance', 'HMLD Per Minute']
+            df_p = dataframe[columns_g]
 
-            pcombo_df = pcombo_df[(pcombo_df['Player Name']==p1)]
-
+            df_p = df_p[(df_p['Session Title']==session)]
+            
             fig = go.Figure()
-            values = list(range(40))
+
+            fig.add_shape(type='line',
+                            x0=0,
+                            y0=7.5,
+                            x1=11,
+                            y1=7.5,
+                            line=dict(color='Red',),
+                            xref='x',
+                            yref='y'
+            )
             fig.add_trace(
                 go.Bar(
-                    x=pcombo_df['Session Title'],
-                    y=pcombo_df[metric],
-                    #name=metric,
-                    text = pcombo_df[metric],
+                    x=df_p['Player Name'],
+                    y=df_p[metric],
+                    #name="Number of Sprints",
+                    text = df_p[metric],
                     textposition='outside',
                     textfont=dict(
                     size=13,
-                    color='black'),
-                    marker_color=pcombo_df[metric],
-                    #marker_color=values, 
-                    #marker_line_color='#4a148c',
-                    marker_line_width=2, 
-                    opacity=0.7
+                    color='#1f77b4'),      
+                    #marker_color=["#f3e5f5", '#e1bee7', '#ce93d8', '#ba68c8','#ab47bc',
+                     #           '#9c27b0','#8e24aa','#7b1fa2','#6a1b9a','#4a148c','#3c0a99'],
+                    #marker_line_color='rgb(17, 69, 126)',
+                    #marker_line_width=1, 
                 ))
             fig.update_traces(texttemplate='%{text:.2s}')
-            fig.update_traces(marker_showscale=True),
+            #fig.update_layout(legend_title_text='Stats',
+            #                title_text='Pace Stats over the Season')
             
             fig.update_layout(
-                            title_font_family="Times New Roman",
-                            title_font_size = 25,
-                            title_font_color="darkblue",
-                            title_x=0.5,
-                            showlegend = False,
-                            #legend_title_text='Stats',
-                            plot_bgcolor="rgb(240,240,240)",
-                            title_text=f'{metric} Stats over the Season',
-                            height=550)
+                                        title_font_family="Times New Roman",
+                                        title_font_size = 25,
+                                        title_font_color="darkblue",
+                                        title_x=0.5,
+                                        legend_title_text='Stats',
+                                        plot_bgcolor="rgb(240,240,240)",
+                                        title_text=f' Time Series Stats over the Season for {metric}',
+                                        height=550
+            )
+            
             
             return fig
+
+
+        
+        with st.sidebar:
+            st.title('Player Performance Analysis')
+            #st.sidebar.markdown('''##### Player's performance over the season''')
+            player1 = st.selectbox("Select Player",players_list, index = 0)
+            session = st.selectbox("Select Session",session_list, index = 0)
+            selected_date = st.sidebar.select_slider('Select the match date range', match_dates, value=[min(match_dates),max(match_dates)])
+            st.markdown("""
+            <style>
+            div.stButton > button:first-child {
+                background-color: #ffffff;
+                
+            }
+            div.stButton > button:hover {
+                background-color: #ffffff;
+                color:ff0000;
+                }
+            </style>""", unsafe_allow_html=True)
             
+            submitButton = st.button("Submit")
+            #st.subheader('Key Metrics')
+            st.sidebar.markdown("""
+            | Metric | Description |
+            | --- | ---- |
+            | Distance Per Min | Distance covered per min |
+            | HMLD Per Minute |High Metabolic Load |
+            | Max Speed |Maximum speed attained during the game|
+            | HSR Per Min | describe this |
+            | Total Distance |Distance covered during the session |
+            | Max Acceleration |Maximum acceleration attained during the game |
+            """
+            )
+        if submitButton:
+            pchart = pizzaChart(player1)
+            gauge_s, gauge_d, gauge_hd = gauges(player1,session)
+            combo_c = comboChart(player1)
             
+            player_img = Image.open(f"Facepack/{player1}.png")
             
-        st.title('Player Performance Analysis')
-        #st.sidebar.markdown('''##### Player's performance over the season''')
-        player1 = st.selectbox("Select Player",players_list, index = 0)
-        session = st.selectbox("Select Session",session_list, index = 0)
-        
-        
-        
-        player_img = Image.open(f"Facepack/{player1}.png")
-        
-        col1.markdown("_________________")
-        col1.markdown('**Date of birth/Age:**   \n **Citizenship:**   \n**Height:**   \n **Position:**   \n **Joined:**   \n **Contract expires:**   \n**Date of last contract extension:** ')
-        
-        col2.image(player_img)
-        st.markdown("_________________")            
-        col3,col4,col5 = st.columns(3)
-        
-        gauge_s, gauge_d, gauge_hd = gauges(player1,session)
-        
-        if gauge_s == 0:
-            st.info("Gauge figures not available as the player didn't play the match")
-        else:
+            col1.markdown("_________________")
+            col1.markdown('**Date of birth/Age:**   \n **Citizenship:**   \n**Height:**   \n **Position:**   \n **Joined:**   \n **Contract expires:**   \n**Date of last contract extension:** ')
+            
+            col2.image(player_img)
+            st.markdown("_________________")            
+            col3,col4,col5 = st.columns(3)
+            
             col3.plotly_chart( gauge_s, use_container_width=True)
             col4.plotly_chart( gauge_d, use_container_width=True)
             col5.plotly_chart(gauge_hd, use_container_width=True)
-        
-        
-        pchart,pizzaDf = pizzaChart(player1)
-        
-        pizzaDf = pizzaDf.reset_index()
-        pizzaDf = pizzaDf.drop(['index'],axis =1)
-        pizzaDf = pizzaDf.set_index('Session Title')     
-        
-        col6,col7 = st.columns(2)
-        
-        col6.pyplot(pchart) 
-        col7.dataframe(pizzaDf)          
-        
-        
-        
-        
-        
-        combo_c = comboChart(player1)
-        st.plotly_chart(combo_c, use_container_width=True)
-        
-        metrices = ['Sprints', 'Distance Per Min','Accelerations', 'Max Acceleration','Decelerations','Max Deceleration' ,'HSR Per Minute (Absolute)', 'Average Speed','Max Speed','Total Distance', 'HMLD Per Minute']
-        
-        col8,col9 = st.columns((1,3))
-        metric_sel = col8.selectbox("Select Session :",metrices, index = 0)
-        
-        playerStatC = pStatsChart(player1,metric_sel)
-        col9.plotly_chart(playerStatC, use_container_width=True)
+            col6,col7 = st.columns(2)
+            
+            col6.pyplot(pchart) 
+            col7.plotly_chart(combo_c, use_container_width=True)
+            st.plotly_chart(combo_c, use_container_width=True)
+            
+            metric_list = ['Max Speed']
+            metric_sel = st.selectbox("Select metric",metric_list, index = 0)
+            timeSeries_f = timeSeriesSeason(metric_sel,session)
+            st.plotly_chart(timeSeries_f, use_container_width=True)
         

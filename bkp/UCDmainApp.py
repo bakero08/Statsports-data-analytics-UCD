@@ -9,11 +9,9 @@ import streamlit as st
 
 PAGES = {
     "Home Page": UCDhome,
-    "Team Analysis": UCDapp3,
-    "Player Analysis": UCDapp2,
-    "Player Comparision": UCDApp
-    
-    
+    "Player Comparision": UCDApp,
+    "Player Stats": UCDapp2,
+    "Seasonal Stats": UCDapp3
 }
 st.sidebar.title('Navigation')
 selection = st.sidebar.radio("Go to", list(PAGES.keys()))
