@@ -50,14 +50,14 @@ def app():
             scatter_df = scatter_df.reset_index(0)
             #scatter_df
         
-            position = ['MID', 'ATT', 'DEF','ATT', 'MID', 'DEF','ATT', 'MID','MID', 'DEF','ATT', 'MID', 'DEF','ATT', 'MID', 'DEF','ATT', 'MID', 'DEF','DEF']
+            position = ['FWD', 'MID', 'DEF','MID', 'DEF', 'FWD','FWD', 'DEF','MID', 'DEF','DEF', 'MID', 'MID','FWD', 'FWD', 'DEF','MID', 'DEF', 'DEF','MID']
             scatter_df['position'] = position
             scatter_df = round(scatter_df,2)
             
-            plot = px.scatter(scatter_df, x='Total Distance', y='HMLD Per Minute', color='position', size='Distance Per Min', symbol='position', hover_data = ['Player Name'])
+            plot = px.scatter(scatter_df, x='Total Distance', y='HMLD Per Minute', color='position', size='Distance Per Min', symbol='position', hover_data = ['Player Name'], trendline="ols",trendline_scope="overall")
             plot.update_layout(
                             title_font_family="Times New Roman",
-                            title_font_size = 20,
+                            title_font_size = 25,
                             title_font_color="darkblue",
                             title_x=0.5,
                             plot_bgcolor="rgb(240,240,240)",
@@ -80,21 +80,44 @@ def app():
                     fig.add_shape(type='line',
                                     x0=0,
                                     y0=4.5,
-                                    x1=11,
+                                    x1=12,
                                     y1=4.5,
-                                    line=dict(color='Red',),
+                                    #line=dict(color='Red',),
                                     xref='x',
-                                    yref='y'
+                                    yref='y',
+                                    line=dict(
+                                    color="red",
+                                    width=2,
+                                    dash="dashdot",)
                                   )
+                    
+                    fig.add_shape(type='line',
+                                    x0=0,
+                                    y0=4.5,
+                                    x1=12,
+                                    y1=4.5,
+                                    #line=dict(color='Red',),
+                                    xref='x',
+                                    yref='y',
+                                    line=dict(
+                                    color="red",
+                                    width=2,
+                                    dash="dashdot",)
+                                  )
+                                        
             else:
                     fig.add_shape(type='line',
                                     x0=0,
                                     y0=6.5,
-                                    x1=11,
+                                    x1=12,
                                     y1=6.5,
-                                    line=dict(color='Red',),
+                                    #line=dict(color='Red',),
                                     xref='x',
-                                    yref='y'
+                                    yref='y',
+                                    line=dict(
+                                    color="red",
+                                    width=2,
+                                    dash="dashdot",)
                                   )
             fig.add_trace(
                 go.Bar(
@@ -106,10 +129,9 @@ def app():
                     textfont=dict(
                     size=13,
                     color='#1f77b4'),      
-                    #marker_color=["#f3e5f5", '#e1bee7', '#ce93d8', '#ba68c8','#ab47bc',
-                     #           '#9c27b0','#8e24aa','#7b1fa2','#6a1b9a','#4a148c','#3c0a99'],
-                    #marker_line_color='rgb(17, 69, 126)',
-                    #marker_line_width=1, 
+                    marker_color='lemonchiffon',
+                    marker_line_color='orange',
+                    marker_line_width=1, 
                 ))
             fig.update_traces(texttemplate='%{text:.2s}')
                    
@@ -120,7 +142,7 @@ def app():
                                         title_x=0.5,
                                         legend_title_text='Stats',
                                         plot_bgcolor="rgb(240,240,240)",
-                                        title_text=f'{metric} for the Team in {session}',
+                                        title_text=f'{metric} for the Team with Thresholds',
                                         height=550
             )
             
@@ -138,7 +160,7 @@ def app():
             plot = px.scatter(adratio_df, x='Total Distance', y='Acc/Dec', color='Player Name', size='Distance Per Min')
             plot.update_layout(
                             title_font_family="Times New Roman",
-                            title_font_size = 20,
+                            title_font_size = 25,
                             title_font_color="darkblue",
                             title_x=0.5,
                             plot_bgcolor="rgb(240,240,240)",
@@ -146,7 +168,34 @@ def app():
                             height=550)
             return plot
             
+        
+
+        def scatterPlotCustom(xaxis,yaxis):
+            columns_to_keep_scat = ['Player Name', 'Distance Per Min', 'HSR Per Minute (Absolute)','Average Speed', 'Max Speed', 'Max Acceleration','Total Distance', 'HMLD Per Minute', 'Accelerations','Decelerations','Dynamic Stress Load Zone 6','Impacts Zone 6']
+            scatter_df = dataframe[columns_to_keep_scat]
             
+            scatter_df = scatter_df.groupby('Player Name').mean()
+            scatter_df = scatter_df.reset_index(0)
+            #scatter_df
+        
+            #position = ['MID', 'ATT', 'DEF','ATT', 'MID', 'DEF','ATT', 'MID','MID', 'DEF','ATT', 'MID', 'DEF','ATT', 'MID', 'DEF','ATT', 'MID', 'DEF','DEF']
+            #scatter_df['position'] = position
+            scatter_df = round(scatter_df,2)
+            
+            plot = px.scatter(scatter_df, x=xaxis, y=yaxis, color='Player Name', hover_data = ['Player Name'], trendline="ols",trendline_scope="overall")
+            plot.update_layout(
+                            title_font_family="Times New Roman",
+                            title_font_size = 25,
+                            title_font_color="darkblue",
+                            title_x=0.5,
+                            plot_bgcolor="rgb(240,240,240)",
+                            title_text='Average stats over the season',
+                            showlegend=False,
+                            height=550)
+            plot.update_traces(marker=dict(size=12))
+            return plot    
+         
+         
         scatterP = scatterPlot()
         st.plotly_chart(scatterP, use_container_width=True)
 
@@ -172,4 +221,16 @@ def app():
         col6.plotly_chart(adPlot, use_container_width=True)
         
 
+        columns_to_keep_s = ['Distance Per Min', 'HSR Per Minute (Absolute)','Average Speed', 'Max Speed', 'Max Acceleration','Total Distance', 'HMLD Per Minute', 'Accelerations','Decelerations','Dynamic Stress Load Zone 6','Impacts Zone 6']
+        scat_df = dataframe[columns_to_keep_s]
+        xax = np.sort(scat_df.columns.values)
+        yax = np.sort(scat_df.columns.values)[::-1]
+        
+        col7,col8 = st.columns((1,3))
+        
+        xaxis_sel = col7.selectbox("Select x-axis",xax, index = 0)
+        yaxis_sel = col7.selectbox("Select y-axis",yax, index = 0)
+        
+        scatterC = scatterPlotCustom(xaxis_sel,yaxis_sel)
+        col8.plotly_chart(scatterC, use_container_width=True)
             
