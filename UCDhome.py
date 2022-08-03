@@ -2,7 +2,7 @@ import pandas as pd
 import streamlit as st
 from PIL import Image
 
-st.set_page_config(layout="wide")
+#st.set_page_config(layout="wide")
 
 def app():
     
@@ -21,7 +21,6 @@ def app():
         )
     
     st.title("")
-    
     col1, col2, col3 = st.columns((1,2,1))
     
     image = Image.open('ucd_logo.png')
