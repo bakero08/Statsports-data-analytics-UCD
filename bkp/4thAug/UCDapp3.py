@@ -21,7 +21,7 @@ import plotly.express as px
 import plotly.graph_objects as go
 #from urllib.request import urlopen
 
-#st.set_page_config(layout="wide")
+
 
 
 def app():

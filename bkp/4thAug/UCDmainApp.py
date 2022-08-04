@@ -1,16 +1,14 @@
-import UCDhome
 import UCDApp
 import UCDapp2
 import UCDapp3
-import UCDapp4
+import UCDhome
 
 import streamlit as st
 
-#st.set_page_config(layout="wide")
+st.set_page_config(layout="wide")
 
 PAGES = {
     "Home Page": UCDhome,
-    "Data Upload": UCDapp4,
     "Team Analysis": UCDapp3,
     "Player Analysis": UCDapp2,
     "Player Comparision": UCDApp

@@ -2,7 +2,7 @@ import pandas as pd
 import streamlit as st
 from PIL import Image
 
-st.set_page_config(layout="wide")
+#st.set_page_config(layout="wide")
 
 def app():
     
@@ -27,6 +27,6 @@ def app():
     col1.image(image)
     col2.markdown("<h1 style='text-align: center; margin-center: 15px;color:Black;font-family:Arial Black'>VIDA - Data Analysing Tool UCD AFC </h1>", unsafe_allow_html=True)
     #col2.markdown("<style> .css-18c15ts {padding-top: 1rem; margin-top:-10px;} </style>", unsafe_allow_html=True)
-     
     
     col3.write("")
+        
